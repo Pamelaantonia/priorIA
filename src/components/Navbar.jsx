@@ -8,17 +8,30 @@ export default function Navbar() {
   return (
     <AppBar position="static" color="default" elevation={1}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
+        {/* Menú a la izquierda */}
         <Box sx={{ display: "flex", gap: "1.5rem" }}>
-          <Typography variant="button" sx={{ color: "#007AFF", fontWeight: "bold" }}>Inicio</Typography>
-          <Typography variant="button">Cargar Plantilla</Typography>
-          <Typography variant="button">Planificaciones</Typography>
-          <Typography variant="button">Mi Perfil</Typography>
+          <Typography variant="button" sx={{ color: "#007AFF", fontWeight: "bold" }}>
+            PriorIA
+          </Typography>
+
+          {isAuthenticated ? (
+            <>
+              <Typography variant="button">Cargar Plantilla</Typography>
+              <Typography variant="button">Planificaciones</Typography>
+              <Typography variant="button">Mi Perfil</Typography>
+            </>
+          ) : (
+            <Typography variant="button" sx={{ color: "#999" }}>
+              Inicia sesión para comenzar
+            </Typography>
+          )}
         </Box>
 
+        {/* Área de login/logout */}
         <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           {isAuthenticated && (
             <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              {user?.name}
+              ¡Hola, {user?.name}!
             </Typography>
           )}
 
@@ -30,7 +43,13 @@ export default function Navbar() {
             <Button
               variant="contained"
               color="error"
-              onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+              onClick={() =>
+                logout({
+                  logoutParams: {
+                    returnTo: window.location.origin,
+                  },
+                })
+              }
             >
               Cerrar sesión
             </Button>
