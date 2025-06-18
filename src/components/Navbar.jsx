@@ -1,57 +1,59 @@
 import React from "react";
 import { AppBar, Toolbar, Box, Typography, Button } from "@mui/material";
-import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Navbar() {
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const token = localStorage.getItem("token");
+  const userName = localStorage.getItem("userName");
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
 
   return (
     <AppBar position="static" color="default" elevation={1}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        {/* Menú a la izquierda */}
-        <Box sx={{ display: "flex", gap: "1.5rem" }}>
-          <Typography variant="button" sx={{ color: "#007AFF", fontWeight: "bold" }}>
-            PriorIA
-          </Typography>
+        <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+          <Button
+            color="inherit"
+            href="/"
+            sx={{ p: 0, textTransform: "none", fontSize: "1.3rem", fontWeight: "bold" }}
+          >
+            <Box component="span" sx={{ color: "#007AFF" }}>
+              Prior
+            </Box>
+            <Box component="span" sx={{ color: "#FF4081" }}>
+              IA
+            </Box>
+          </Button>
 
-          {isAuthenticated ? (
-            <>
-              <Typography variant="button">Cargar Plantilla</Typography>
-              <Typography variant="button">Planificaciones</Typography>
-              <Typography variant="button">Mi Perfil</Typography>
-            </>
-          ) : (
-            <Typography variant="button" sx={{ color: "#999" }}>
-              Inicia sesión para comenzar
-            </Typography>
-          )}
+          <Button
+            color="inherit"
+            onClick={() => {
+              if (!token) {
+                alert("Debes iniciar sesión para ver tus planificaciones.");
+                return;
+              }
+              window.location.href = "/planes";
+            }}
+          >
+            Planificaciones
+          </Button>
         </Box>
 
-        {/* Área de login/logout */}
         <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          {isAuthenticated && (
-            <Typography variant="body2" sx={{ fontWeight: 500 }}>
-              ¡Hola, {user?.name}!
-            </Typography>
-          )}
-
-          {!isAuthenticated ? (
-            <Button variant="outlined" onClick={() => loginWithRedirect()}>
-              Iniciar sesión
-            </Button>
+          {token ? (
+            <>
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                ¡Hola, {userName || "Usuario"}!
+              </Typography>
+              <Button variant="contained" color="error" onClick={handleLogout}>
+                Cerrar sesión
+              </Button>
+            </>
           ) : (
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() =>
-                logout({
-                  logoutParams: {
-                    returnTo: window.location.origin,
-                  },
-                })
-              }
-            >
-              Cerrar sesión
+            <Button variant="contained" color="primary" href="/login">
+              Iniciar sesión
             </Button>
           )}
         </Box>

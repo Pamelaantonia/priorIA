@@ -77,6 +77,16 @@ const styles = {
     fontSize: 14,
     color: "#666",
   },
+
+
+  heroImage: {
+    maxWidth: "360px",
+    width: "100%",
+    borderRadius: 12,
+    boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
+    mx: "auto",
+  }
 }
+
 
 export default styles
